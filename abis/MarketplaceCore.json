@@ -1,0 +1,561 @@
+[
+  {
+    "type": "constructor",
+    "inputs": [
+      { "name": "_roleManager", "type": "address", "internalType": "address" },
+      {
+        "name": "_escrowManager",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "_nftMarketplace",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  { "name": "AssetHashRequired", "type": "error", "inputs": [] },
+  { "name": "CannotBuyOwnListing", "type": "error", "inputs": [] },
+  { "name": "EnforcedPause", "type": "error", "inputs": [] },
+  { "name": "ExpectedPause", "type": "error", "inputs": [] },
+  { "name": "IncorrectPayment", "type": "error", "inputs": [] },
+  { "name": "InsufficientBalance", "type": "error", "inputs": [] },
+  {
+    "name": "InvalidAssetType",
+    "type": "error",
+    "inputs": [
+      { "name": "assetType", "type": "uint8", "internalType": "uint8" }
+    ]
+  },
+  { "name": "InvalidEscrowManager", "type": "error", "inputs": [] },
+  { "name": "InvalidNFTMarketplace", "type": "error", "inputs": [] },
+  { "name": "InvalidNFTParameters", "type": "error", "inputs": [] },
+  { "name": "InvalidPrice", "type": "error", "inputs": [] },
+  { "name": "InvalidRoleManager", "type": "error", "inputs": [] },
+  { "name": "ListingNotActive", "type": "error", "inputs": [] },
+  { "name": "MetadataURIRequired", "type": "error", "inputs": [] },
+  {
+    "name": "NotAdmin",
+    "type": "error",
+    "inputs": [
+      { "name": "caller", "type": "address", "internalType": "address" }
+    ]
+  },
+  { "name": "NotApproved", "type": "error", "inputs": [] },
+  {
+    "name": "NotAuthorized",
+    "type": "error",
+    "inputs": [
+      { "name": "caller", "type": "address", "internalType": "address" }
+    ]
+  },
+  { "name": "NotOwner", "type": "error", "inputs": [] },
+  {
+    "name": "NotPauser",
+    "type": "error",
+    "inputs": [
+      { "name": "caller", "type": "address", "internalType": "address" }
+    ]
+  },
+  { "name": "NotSeller", "type": "error", "inputs": [] },
+  { "name": "ReentrancyGuardReentrantCall", "type": "error", "inputs": [] },
+  { "name": "UseCreateNFTListing", "type": "error", "inputs": [] },
+  { "name": "ZeroAddress", "type": "error", "inputs": [] },
+  {
+    "name": "AuthorizedCallerAdded",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "caller",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "AuthorizedCallerRemoved",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "caller",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "ListingCancelled",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "listingId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "seller",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "ListingCreated",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "listingId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "seller",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "assetType",
+        "type": "uint8",
+        "indexed": false,
+        "internalType": "enum AssetTypes.AssetType"
+      },
+      {
+        "name": "price",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "ListingSold",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "listingId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "buyer",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "seller",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "price",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "NFTListingCreated",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "listingId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "seller",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "nftContract",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "quantity",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "price",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "Paused",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "account",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "PriceUpdated",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "listingId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "oldPrice",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "newPrice",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "Unpaused",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "account",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "addAuthorizedCaller",
+    "type": "function",
+    "inputs": [
+      { "name": "caller", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "authorizedCallers",
+    "type": "function",
+    "inputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "cancelListing",
+    "type": "function",
+    "inputs": [
+      { "name": "listingId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "createNFTListing",
+    "type": "function",
+    "inputs": [
+      { "name": "nftContract", "type": "address", "internalType": "address" },
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" },
+      { "name": "quantity", "type": "uint256", "internalType": "uint256" },
+      { "name": "price", "type": "uint256", "internalType": "uint256" },
+      {
+        "name": "standard",
+        "type": "uint8",
+        "internalType": "enum AssetTypes.TokenStandard"
+      }
+    ],
+    "outputs": [
+      { "name": "listingId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "createOffChainListing",
+    "type": "function",
+    "inputs": [
+      {
+        "name": "assetType",
+        "type": "uint8",
+        "internalType": "enum AssetTypes.AssetType"
+      },
+      { "name": "price", "type": "uint256", "internalType": "uint256" },
+      { "name": "assetHash", "type": "bytes32", "internalType": "bytes32" },
+      { "name": "metadataURI", "type": "string", "internalType": "string" }
+    ],
+    "outputs": [
+      { "name": "listingId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "escrowManager",
+    "type": "function",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract IEscrowManager"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "getListing",
+    "type": "function",
+    "inputs": [
+      { "name": "listingId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "components": [
+          { "name": "listingId", "type": "uint256", "internalType": "uint256" },
+          { "name": "seller", "type": "address", "internalType": "address" },
+          {
+            "name": "assetType",
+            "type": "uint8",
+            "internalType": "enum AssetTypes.AssetType"
+          },
+          { "name": "price", "type": "uint256", "internalType": "uint256" },
+          {
+            "name": "status",
+            "type": "uint8",
+            "internalType": "enum AssetTypes.ListingStatus"
+          },
+          { "name": "createdAt", "type": "uint256", "internalType": "uint256" },
+          { "name": "assetHash", "type": "bytes32", "internalType": "bytes32" },
+          { "name": "metadataURI", "type": "string", "internalType": "string" }
+        ],
+        "internalType": "struct IMarketplace.Listing"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "getNFTDetails",
+    "type": "function",
+    "inputs": [
+      { "name": "listingId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "components": [
+          {
+            "name": "nftContract",
+            "type": "address",
+            "internalType": "address"
+          },
+          { "name": "tokenId", "type": "uint64", "internalType": "uint64" },
+          { "name": "quantity", "type": "uint16", "internalType": "uint16" },
+          {
+            "name": "standard",
+            "type": "uint8",
+            "internalType": "enum AssetTypes.TokenStandard"
+          }
+        ],
+        "internalType": "struct IMarketplace.NFTDetails"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "getSellerListings",
+    "type": "function",
+    "inputs": [
+      { "name": "seller", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [
+      { "name": "", "type": "uint256[]", "internalType": "uint256[]" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "isNFTListing",
+    "type": "function",
+    "inputs": [
+      { "name": "listingId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "listingCounter",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "listings",
+    "type": "function",
+    "inputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "outputs": [
+      { "name": "listingId", "type": "uint256", "internalType": "uint256" },
+      { "name": "seller", "type": "address", "internalType": "address" },
+      {
+        "name": "assetType",
+        "type": "uint8",
+        "internalType": "enum AssetTypes.AssetType"
+      },
+      { "name": "price", "type": "uint256", "internalType": "uint256" },
+      {
+        "name": "status",
+        "type": "uint8",
+        "internalType": "enum AssetTypes.ListingStatus"
+      },
+      { "name": "createdAt", "type": "uint256", "internalType": "uint256" },
+      { "name": "assetHash", "type": "bytes32", "internalType": "bytes32" },
+      { "name": "metadataURI", "type": "string", "internalType": "string" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "markListingAsSold",
+    "type": "function",
+    "inputs": [
+      { "name": "listingId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "nftDetails",
+    "type": "function",
+    "inputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "outputs": [
+      { "name": "nftContract", "type": "address", "internalType": "address" },
+      { "name": "tokenId", "type": "uint64", "internalType": "uint64" },
+      { "name": "quantity", "type": "uint16", "internalType": "uint16" },
+      {
+        "name": "standard",
+        "type": "uint8",
+        "internalType": "enum AssetTypes.TokenStandard"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "nftMarketplace",
+    "type": "function",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract INFTMarketplace"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "pause",
+    "type": "function",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "paused",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "purchaseAsset",
+    "type": "function",
+    "inputs": [
+      { "name": "listingId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "name": "removeAuthorizedCaller",
+    "type": "function",
+    "inputs": [
+      { "name": "caller", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "roleManager",
+    "type": "function",
+    "inputs": [],
+    "outputs": [
+      { "name": "", "type": "address", "internalType": "contract RoleManager" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "sellerListings",
+    "type": "function",
+    "inputs": [
+      { "name": "", "type": "address", "internalType": "address" },
+      { "name": "", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "unpause",
+    "type": "function",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "updatePrice",
+    "type": "function",
+    "inputs": [
+      { "name": "listingId", "type": "uint256", "internalType": "uint256" },
+      { "name": "newPrice", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  }
+]

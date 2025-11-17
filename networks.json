@@ -1,0 +1,8 @@
+{
+  "base-sepolia": {
+    "MarketplaceCore": {
+      "address": "0x2d5afd37eCDD11F674FBBcBf4ddc458bA5F34AC8",
+      "startBlock": 33823350
+    }
+  }
+}
