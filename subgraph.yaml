@@ -5,6 +5,288 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
+    name: RoleManager
+    network: base-sepolia
+    source:
+      address: "0x7101c1FA43c1ec3acC81CC5cCf5072265eCF4b76"
+      abi: RoleManager
+      startBlock: 33823350
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - RoleGrantScheduled
+        - RoleGrantExecuted
+        - RoleGrantCancelled
+        - RoleGranted
+        - RoleRevoked
+        - RoleAdminChanged
+        - EmergencyPaused
+        - EmergencyUnpaused
+        - PausedRoleManager
+        - UnpausedRoleManager
+      abis:
+        - name: RoleManager
+          file: ./abis/RoleManager.json
+      eventHandlers:
+        - event: RoleGrantScheduled(indexed bytes32,indexed address,indexed address,uint256)
+          handler: handleRoleGrantScheduled
+        - event: RoleGrantExecuted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGrantExecuted
+        - event: RoleGrantCancelled(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGrantCancelled
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGranted
+        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleRevoked
+        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+          handler: handleRoleAdminChanged
+        - event: EmergencyPaused(indexed address,string)
+          handler: handleEmergencyPaused
+        - event: EmergencyUnpaused(indexed address)
+          handler: handleEmergencyUnpaused
+        - event: Paused(address)
+          handler: handlePaused
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/role-manager.ts
+
+  - kind: ethereum
+    name: FeeDistributor
+    network: base-sepolia
+    source:
+      address: "0x8575E4322d6a67d63E567663F36Cb08886D89a6A"
+      abi: FeeDistributor
+      startBlock: 33823350
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - FeesReceived
+        - FeesWithdrawn
+        - PaymentDistributed
+        - PlatformFeeUpdated
+        - FeeCollectorUpdated
+        - PausedFeeDistributor
+        - UnpausedFeeDistributor
+      abis:
+        - name: FeeDistributor
+          file: ./abis/FeeDistributor.json
+      eventHandlers:
+        - event: FeesReceived(indexed address,uint256)
+          handler: handleFeesReceived
+        - event: FeesWithdrawn(indexed address,uint256)
+          handler: handleFeesWithdrawn
+        - event: PaymentDistributed(indexed address,indexed address,uint256,uint256,uint256,uint256)
+          handler: handlePaymentDistributed
+        - event: PlatformFeeUpdated(uint256,uint256)
+          handler: handlePlatformFeeUpdated
+        - event: FeeCollectorUpdated(indexed address,indexed address)
+          handler: handleFeeCollectorUpdated
+        - event: Paused(address)
+          handler: handlePaused
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/fee-distributor.ts
+
+  - kind: ethereum
+    name: VerificationRegistry
+    network: base-sepolia
+    source:
+      address: "0x92dBD77b90dbEb203c37Ce7C5b095eaDE9D17e42"
+      abi: VerificationRegistry
+      startBlock: 33823350
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - VerificationAdded
+        - UserVerificationSubmitted
+        - UserVerificationFinalized
+        - VerificationRevoked
+        - VerificationRenewed
+        - VerificationChallenged
+        - ChallengeResolved
+        - VerifierAdded
+        - VerifierRemoved
+        - PausedVerificationRegistry
+        - UnpausedVerificationRegistry
+      abis:
+        - name: VerificationRegistry
+          file: ./abis/VerificationRegistry.json
+      eventHandlers:
+        - event: VerificationAdded(indexed uint256,indexed address,indexed address,uint8,bytes32,uint256,string)
+          handler: handleVerificationAdded
+        - event: UserVerificationSubmitted(indexed uint256,indexed address,uint8,bytes32,uint256,string)
+          handler: handleUserVerificationSubmitted
+        - event: UserVerificationFinalized(indexed uint256,indexed address,uint8)
+          handler: handleUserVerificationFinalized
+        - event: VerificationRevoked(indexed uint256,indexed address,address,string)
+          handler: handleVerificationRevoked
+        - event: VerificationRenewed(indexed uint256,indexed address,uint256,uint256)
+          handler: handleVerificationRenewed
+        - event: VerificationChallenged(indexed uint256,indexed address,string,uint256)
+          handler: handleVerificationChallenged
+        - event: ChallengeResolved(indexed uint256,bool,indexed address)
+          handler: handleChallengeResolved
+        - event: VerifierAdded(indexed address,address)
+          handler: handleVerifierAdded
+        - event: VerifierRemoved(indexed address,address)
+          handler: handleVerifierRemoved
+        - event: Paused(address)
+          handler: handlePaused
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/verification-registry.ts
+
+  - kind: ethereum
+    name: ReputationManager
+    network: base-sepolia
+    source:
+      address: "0x29cDaD5194854D2063da1B751DBAB7fAC7B3b9FC"
+      abi: ReputationManager
+      startBlock: 33823350
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - ReputationUpdated
+        - UserBanned
+        - UserUnbanned
+        - AuthorizedContractAdded
+        - AuthorizedContractRemoved
+        - PausedReputationManager
+        - UnpausedReputationManager
+      abis:
+        - name: ReputationManager
+          file: ./abis/ReputationManager.json
+      eventHandlers:
+        - event: ReputationUpdated(indexed address,uint8,int256,int256)
+          handler: handleReputationUpdated
+        - event: UserBanned(indexed address,string,address)
+          handler: handleUserBanned
+        - event: UserUnbanned(indexed address,address)
+          handler: handleUserUnbanned
+        - event: AuthorizedContractAdded(indexed address,indexed address)
+          handler: handleAuthorizedContractAdded
+        - event: AuthorizedContractRemoved(indexed address,indexed address)
+          handler: handleAuthorizedContractRemoved
+        - event: Paused(address)
+          handler: handlePaused
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/reputation-manager.ts
+
+  - kind: ethereum
+    name: EscrowManager
+    network: base-sepolia
+    source:
+      address: "0x393a08a772E20C2804452713CE444153903fFCB8"
+      abi: EscrowManager
+      startBlock: 33823350
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - EscrowCreated
+        - AssetDelivered
+        - AssetReceiptConfirmed
+        - EscrowReleased
+        - EscrowCancelled
+        - DisputeOpened
+        - DisputeResolved
+        - MarketplaceAuthorized
+        - MarketplaceDeauthorized
+        - PlatformFeeUpdatedEscrow
+        - PausedEscrowManager
+        - UnpausedEscrowManager
+      abis:
+        - name: EscrowManager
+          file: ./abis/EscrowManager.json
+      eventHandlers:
+        - event: EscrowCreated(indexed uint256,indexed address,indexed address,uint256,uint8,uint256,string)
+          handler: handleEscrowCreated
+        - event: AssetDelivered(indexed uint256,indexed address,uint256)
+          handler: handleAssetDelivered
+        - event: AssetReceiptConfirmed(indexed uint256,indexed address,uint256)
+          handler: handleAssetReceiptConfirmed
+        - event: EscrowReleased(indexed uint256,indexed address,uint256,uint256,uint256)
+          handler: handleEscrowReleased
+        - event: EscrowCancelled(indexed uint256,indexed address,uint256,uint256)
+          handler: handleEscrowCancelled
+        - event: DisputeOpened(indexed uint256,indexed address,string,uint256)
+          handler: handleDisputeOpened
+        - event: DisputeResolved(indexed uint256,indexed address,uint256,address)
+          handler: handleDisputeResolved
+        - event: MarketplaceAuthorized(indexed address,indexed address)
+          handler: handleMarketplaceAuthorized
+        - event: MarketplaceDeauthorized(indexed address,indexed address)
+          handler: handleMarketplaceDeauthorized
+        - event: PlatformFeeUpdated(uint256,uint256,address)
+          handler: handlePlatformFeeUpdated
+        - event: Paused(address)
+          handler: handlePaused
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/escrow-manager.ts
+
+  - kind: ethereum
+    name: NFTFactory
+    network: base-sepolia
+    source:
+      address: "0xB46813BaB10187542a29a09e60258Fd7Fc3526B2"
+      abi: NFTFactory
+      startBlock: 33823350
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - Collection721Created
+        - Collection1155Created
+        - CreationFeeUpdated
+      abis:
+        - name: NFTFactory
+          file: ./abis/NFTFactory.json
+      eventHandlers:
+        - event: Collection721Created(indexed address,indexed address,string,string)
+          handler: handleCollection721Created
+        - event: Collection1155Created(indexed address,indexed address,string,string)
+          handler: handleCollection1155Created
+        - event: CreationFeeUpdated(uint256,uint256)
+          handler: handleCreationFeeUpdated
+      file: ./src/nft-factory.ts
+
+  - kind: ethereum
+    name: NFTMarketplace
+    network: base-sepolia
+    source:
+      address: "0xbC16a2aCaC1F3Bb7e5A01bbC51616cf6187aDC6a"
+      abi: NFTMarketplace
+      startBlock: 33823350
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - NFTTransferred
+        - PaymentDistributedNFT
+      abis:
+        - name: NFTMarketplace
+          file: ./abis/NFTMarketplace.json
+      eventHandlers:
+        - event: NFTTransferred(indexed address,indexed uint256,indexed address,address,uint256)
+          handler: handleNFTTransferred
+        - event: PaymentDistributed(indexed address,uint256,uint256,address,uint256)
+          handler: handlePaymentDistributed
+      file: ./src/nft-marketplace.ts
+
+  - kind: ethereum
     name: MarketplaceCore
     network: base-sepolia
     source:
@@ -48,3 +330,102 @@ dataSources:
         - event: Unpaused(address)
           handler: handleUnpaused
       file: ./src/marketplace-core.ts
+
+  - kind: ethereum
+    name: OfferManager
+    network: base-sepolia
+    source:
+      address: "0x43d0e03da53A54Ac996434eb5C5060f305612935"
+      abi: OfferManager
+      startBlock: 33823350
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - OfferMade
+        - OfferAccepted
+        - OfferCancelled
+        - OfferRejected
+        - OfferExpired
+        - OfferInvalidated
+        - OfferRefunded
+        - PlatformFeeUpdatedOffer
+        - PausedOfferManager
+        - UnpausedOfferManager
+      abis:
+        - name: OfferManager
+          file: ./abis/OfferManager.json
+      eventHandlers:
+        - event: OfferMade(indexed uint256,indexed uint256,indexed address,address,uint256,uint256,uint8)
+          handler: handleOfferMade
+        - event: OfferAccepted(indexed uint256,indexed uint256,indexed address,address,uint256)
+          handler: handleOfferAccepted
+        - event: OfferCancelled(indexed uint256,indexed uint256,indexed address,uint256)
+          handler: handleOfferCancelled
+        - event: OfferRejected(indexed uint256,indexed uint256,indexed address,address,string)
+          handler: handleOfferRejected
+        - event: OfferExpired(indexed uint256,indexed uint256,indexed address)
+          handler: handleOfferExpired
+        - event: OfferInvalidated(indexed uint256,indexed uint256,indexed address,uint256)
+          handler: handleOfferInvalidated
+        - event: OfferRefunded(indexed uint256,indexed address,uint256)
+          handler: handleOfferRefunded
+        - event: PlatformFeeUpdated(uint256,uint256)
+          handler: handlePlatformFeeUpdated
+        - event: Paused(address)
+          handler: handlePaused
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/offer-manager.ts
+
+  - kind: ethereum
+    name: AuctionManager
+    network: base-sepolia
+    source:
+      address: "0x21D6d00678f6F7fb378Eb4881336155B988a3b7a"
+      abi: AuctionManager
+      startBlock: 33823350
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - AuctionCreated
+        - BidPlaced
+        - AuctionEnded
+        - AuctionCancelled
+        - AuctionFailedReserveNotMet
+        - BidRefunded
+        - BidRefundQueued
+        - NFTEscrowed
+        - Withdrawn
+        - PausedAuctionManager
+        - UnpausedAuctionManager
+      abis:
+        - name: AuctionManager
+          file: ./abis/AuctionManager.json
+      eventHandlers:
+        - event: AuctionCreated(indexed uint256,indexed address,uint8,address,uint256,uint256,uint256,uint256,uint256)
+          handler: handleAuctionCreated
+        - event: BidPlaced(indexed uint256,indexed address,uint256,uint256)
+          handler: handleBidPlaced
+        - event: AuctionEnded(indexed uint256,indexed address,indexed address,uint256,uint256,uint256,uint256,address)
+          handler: handleAuctionEnded
+        - event: AuctionCancelled(indexed uint256,indexed address,string)
+          handler: handleAuctionCancelled
+        - event: AuctionFailedReserveNotMet(indexed uint256,uint256,uint256)
+          handler: handleAuctionFailedReserveNotMet
+        - event: BidRefunded(indexed uint256,indexed address,uint256)
+          handler: handleBidRefunded
+        - event: BidRefundQueued(indexed uint256,indexed address,uint256)
+          handler: handleBidRefundQueued
+        - event: NFTEscrowed(indexed uint256,indexed address,uint256,uint256,uint8)
+          handler: handleNFTEscrowed
+        - event: Withdrawn(indexed address,uint256)
+          handler: handleWithdrawn
+        - event: Paused(address)
+          handler: handlePaused
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/auction-manager.ts
