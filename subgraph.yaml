@@ -8,7 +8,7 @@ dataSources:
     name: RoleManager
     network: base-sepolia
     source:
-      address: "0x7101c1FA43c1ec3acC81CC5cCf5072265eCF4b76"
+      address: "0xB30aE8fC2d03c0CC1668a33f7043e782C6335DF2"
       abi: RoleManager
       startBlock: 33823350
     mapping:
@@ -56,7 +56,7 @@ dataSources:
     name: FeeDistributor
     network: base-sepolia
     source:
-      address: "0x8575E4322d6a67d63E567663F36Cb08886D89a6A"
+      address: "0xa4A507773c5C3fAABA00D2D6b10e13629C8CDb5A"
       abi: FeeDistributor
       startBlock: 33823350
     mapping:
@@ -95,7 +95,7 @@ dataSources:
     name: VerificationRegistry
     network: base-sepolia
     source:
-      address: "0x92dBD77b90dbEb203c37Ce7C5b095eaDE9D17e42"
+      address: "0x851f1045Db2e5bAB654b261042F9c0cf58f679d3"
       abi: VerificationRegistry
       startBlock: 33823350
     mapping:
@@ -146,7 +146,7 @@ dataSources:
     name: ReputationManager
     network: base-sepolia
     source:
-      address: "0x29cDaD5194854D2063da1B751DBAB7fAC7B3b9FC"
+      address: "0xC2aD9767ce87d3Fe355E64e57Ca02740E79F5476"
       abi: ReputationManager
       startBlock: 33823350
     mapping:
@@ -185,7 +185,7 @@ dataSources:
     name: EscrowManager
     network: base-sepolia
     source:
-      address: "0x393a08a772E20C2804452713CE444153903fFCB8"
+      address: "0xbB71Cf484B68BC6C76C98337cc3630b44d7d61de"
       abi: EscrowManager
       startBlock: 33823350
     mapping:
@@ -239,7 +239,7 @@ dataSources:
     name: NFTFactory
     network: base-sepolia
     source:
-      address: "0xB46813BaB10187542a29a09e60258Fd7Fc3526B2"
+      address: "0xAC15e9FdD7FF06dA3Ac4A5d1B40Ee18CC990AE9d"
       abi: NFTFactory
       startBlock: 33823350
     mapping:
@@ -266,7 +266,7 @@ dataSources:
     name: NFTMarketplace
     network: base-sepolia
     source:
-      address: "0xbC16a2aCaC1F3Bb7e5A01bbC51616cf6187aDC6a"
+      address: "0xd5836EA3908fAAE86Ae4cBB1b1f1e81Fd3d7c506"
       abi: NFTMarketplace
       startBlock: 33823350
     mapping:
@@ -290,7 +290,7 @@ dataSources:
     name: MarketplaceCore
     network: base-sepolia
     source:
-      address: "0x2d5afd37eCDD11F674FBBcBf4ddc458bA5F34AC8"
+      address: "0xeAA57c46cE1D692De22d122b4f94c9676A3a7Ac8"
       abi: MarketplaceCore
       startBlock: 33823350
     mapping:
@@ -335,7 +335,7 @@ dataSources:
     name: OfferManager
     network: base-sepolia
     source:
-      address: "0x43d0e03da53A54Ac996434eb5C5060f305612935"
+      address: "0x769Af84Ce8023911b77bbD8e1cd15AD57c1B8FdF"
       abi: OfferManager
       startBlock: 33823350
     mapping:
@@ -380,10 +380,106 @@ dataSources:
       file: ./src/offer-manager.ts
 
   - kind: ethereum
+    name: VertixSinglesNFT721
+    network: base-sepolia
+    source:
+      address: "0x95a961239BaFF966C87C454e2c3c3be618DEa760"
+      abi: VertixSinglesNFT721
+      startBlock: 33823350
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - SingleNFTMinted
+        - Transfer
+        - Approval
+        - ApprovalForAll
+        - PausedSinglesNFT
+        - UnpausedSinglesNFT
+      abis:
+        - name: VertixSinglesNFT721
+          file: ./abis/VertixSinglesNFT721.json
+      eventHandlers:
+        - event: SingleNFTMinted(indexed address,indexed uint256,string)
+          handler: handleSingleNFTMinted
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: Paused(address)
+          handler: handlePaused
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/vertix-singles-nft-721.ts
+
+  - kind: ethereum
+    name: SinglesNFTHelper
+    network: base-sepolia
+    source:
+      address: "0xd97e2A3C83fa92BF48DcF54617d01af9146897c8"
+      abi: SinglesNFTHelper
+      startBlock: 33823350
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - SingleNFTMintedAndListed
+      abis:
+        - name: SinglesNFTHelper
+          file: ./abis/SinglesNFTHelper.json
+      eventHandlers:
+        - event: SingleNFTMintedAndListed(indexed address,indexed uint256,indexed uint256,uint256,address)
+          handler: handleSingleNFTMintedAndListed
+      file: ./src/singles-nft-helper.ts
+
+  - kind: ethereum
+    name: VertixSinglesNFT1155
+    network: base-sepolia
+    source:
+      address: "0x7b303BB4542eBe35A8276A60f0d4A7C36b654b30"
+      abi: VertixSinglesNFT1155
+      startBlock: 33823350
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - SingleEditionMinted
+        - TransferSingle
+        - TransferBatch
+        - ApprovalForAll1155
+        - URIUpdated
+        - PausedSinglesNFT1155
+        - UnpausedSinglesNFT1155
+      abis:
+        - name: VertixSinglesNFT1155
+          file: ./abis/VertixSinglesNFT1155.json
+      eventHandlers:
+        - event: SingleEditionMinted(indexed address,indexed uint256,uint256,uint256,string)
+          handler: handleSingleEditionMinted
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: URI(string,indexed uint256)
+          handler: handleURI
+        - event: Paused(address)
+          handler: handlePaused
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/vertix-singles-nft-1155.ts
+
+  - kind: ethereum
     name: AuctionManager
     network: base-sepolia
     source:
-      address: "0x21D6d00678f6F7fb378Eb4881336155B988a3b7a"
+      address: "0xf01d765a6cb96C767A67541884531B02A4ADCF7B"
       abi: AuctionManager
       startBlock: 33823350
     mapping:
